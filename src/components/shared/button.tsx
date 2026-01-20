@@ -1,0 +1,212 @@
+import { Theme, useTheme } from "@/src/theme";
+import {
+    horizontalScale,
+    moderateScale,
+    verticalScale,
+} from "@/src/utils/scale";
+import React from "react";
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    TextStyle,
+    TouchableOpacity,
+    View,
+    ViewStyle,
+} from "react-native";
+
+type ButtonVariant =
+  | "default"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "link"
+  | "destructive"
+  | "success"
+  | "warning";
+
+type ButtonSize = "small" | "medium" | "large" | "extra_large";
+
+interface ButtonProps {
+  title?: string;
+  onPress: () => void;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  style?: ViewStyle;
+  fontSize?: number;
+  textColor?: string;
+  showShadow?: boolean;
+}
+
+const Button = ({
+  title,
+  onPress,
+  variant = "link",
+  size = "small",
+  fullWidth = false,
+  disabled = false,
+  loading = false,
+  leftIcon,
+  rightIcon,
+  style,
+  fontSize,
+  textColor,
+  showShadow = false,
+}: ButtonProps) => {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
+  const containerStyles: ViewStyle[] = [
+    styles.base,
+    styles[variant],
+    styles[size],
+    fullWidth && styles.fullWidth,
+    showShadow && styles.shadow,
+    disabled && styles.disabled,
+    style,
+  ];
+
+  const textStyles: TextStyle[] = [
+    styles.text,
+    styles[`${variant}Text`],
+    { fontSize: fontSize ?? 18 },
+    textColor && { color: textColor },
+    disabled && styles.disabledText,
+  ];
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      disabled={disabled || loading}
+      onPress={onPress}
+      style={containerStyles}
+    >
+      {loading ? (
+        <ActivityIndicator
+          color={
+            variant === "outline" || variant === "link" || variant === "ghost"
+              ? theme.colors.text.primary
+              : "#fff"
+          }
+        />
+      ) : (
+        <View style={styles.content}>
+          {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
+          {title && <Text style={textStyles}>{title}</Text>}
+          {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    base: {
+      borderRadius: moderateScale(10),
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: horizontalScale(20),
+      flexDirection: "row",
+    },
+
+    /* Sizes */
+    small: { paddingVertical: horizontalScale(8) },
+    medium: { paddingVertical: horizontalScale(12) },
+    large: { paddingVertical: horizontalScale(16) },
+    extra_large: {
+      paddingVertical: horizontalScale(20),
+      borderRadius: moderateScale(14),
+    },
+
+    fullWidth: { width: "100%" },
+
+    /* Variants */
+    default: {
+      backgroundColor: theme.colors.primary.main,
+      shadowColor: theme.colors.primary.main,
+    },
+    secondary: {
+      backgroundColor: theme.colors.gray[200],
+      shadowColor: theme.colors.gray[200],
+    },
+    success: {
+      backgroundColor: theme.colors.success.main,
+      shadowColor: theme.colors.success.main,
+    },
+    destructive: {
+      backgroundColor: theme.colors.error.main,
+      shadowColor: theme.colors.error.main,
+    },
+    warning: {
+      backgroundColor: theme.colors.warning.main,
+      shadowColor: theme.colors.warning.main,
+    },
+    outline: {
+      backgroundColor: "transparent",
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+    },
+
+    ghost: {
+      backgroundColor: "transparent",
+    },
+
+    link: {
+      backgroundColor: "transparent",
+      paddingHorizontal: 0,
+    },
+
+    /* Text */
+    text: {
+      fontWeight: "600",
+    },
+
+    defaultText: { color: theme.colors.white },
+    secondaryText: { color: theme.colors.text.primary },
+    outlineText: { color: theme.colors.text.primary },
+    ghostText: { color: theme.colors.text.primary },
+    destructiveText: {
+      color: theme.colors.white,
+    },
+    linkText: {
+      color: theme.colors.primary.main,
+      textDecorationLine: "underline",
+    },
+    warningText: {
+      color: theme.colors.white,
+    },
+    successText: {
+      color: theme.colors.white,
+    },
+
+    /* States */
+    disabled: { opacity: 0.5 },
+    disabledText: { opacity: 0.7 },
+
+    /* Layout */
+    content: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: horizontalScale(8),
+    },
+
+    icon: {
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    shadow: {
+      shadowOffset: { width: 0, height: verticalScale(4) },
+      shadowOpacity: 0.15,
+      shadowRadius: moderateScale(4),
+      elevation: moderateScale(3),
+    },
+  });
+
+export default Button;
