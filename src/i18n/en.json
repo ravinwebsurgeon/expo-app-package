@@ -1,0 +1,8 @@
+{
+  "app": {
+    "welcome": "Welcome"
+  },
+  "login": {
+    "input_paceholder": "Enter Text"
+  }
+}
