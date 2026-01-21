@@ -4,5 +4,8 @@
   },
   "login": {
     "input_paceholder": "Enter Text in spanish"
+  },
+  "media": {
+    "select_media": "select_media in spanish"
   }
 }

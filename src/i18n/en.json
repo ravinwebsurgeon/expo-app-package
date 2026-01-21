@@ -4,5 +4,8 @@
   },
   "login": {
     "input_paceholder": "Enter Text"
+  },
+  "media": {
+    "select_media": "Select Media..."
   }
 }

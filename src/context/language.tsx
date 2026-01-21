@@ -24,7 +24,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   // Sync i18n on mount & language change
   useEffect(() => {
     if (i18n.language !== selectedLanguage) {
-      i18n.changeLanguage(selectedLanguage).catch((e) => {
+      i18n.changeLanguage("selectedLanguage").catch((e) => {
         console.warn("Failed to change language", e);
       });
     }

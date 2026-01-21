@@ -26,7 +26,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-type IconPosition = "left" | "right";
+export type IconPosition = "left" | "right";
 interface InputProps<T extends FieldValues> extends TextInputProps {
   control: Control<T>;
   name: Path<T>;
@@ -79,7 +79,7 @@ export const Input = <T extends FieldValues>({
       name={name}
       rules={rules}
       render={({ field, fieldState }) => (
-        <View style={[containerStyle, { gap: verticalScale(8) }]}>
+        <View style={[styles.container, containerStyle]}>
           <View style={styles.row}>
             {labelIcon && labelIconPosition === "left" && (
               <View style={styles.center}>{labelIcon}</View>
@@ -165,6 +165,9 @@ export const Input = <T extends FieldValues>({
 
 const makeStyles = (theme: Theme) =>
   StyleSheet.create({
+    container: {
+      gap: verticalScale(8),
+    },
     label: {
       color: theme.colors.text.primary,
       fontSize: moderateScale(14),
@@ -179,7 +182,7 @@ const makeStyles = (theme: Theme) =>
       borderColor: theme.colors.border,
       borderRadius: moderateScale(10),
       paddingHorizontal: horizontalScale(12),
-      backgroundColor: theme.colors.inputBackground,
+      backgroundColor: theme.colors.background.default,
       minHeight: verticalScale(48),
     },
 

@@ -8,7 +8,10 @@ export const LocalizedStrings = {
     SIGN_IN: "auth.signIn",
     SIGN_UP: "auth.signUp",
   },
-  LOGIN:{
-    INPUT_PLACEHOLDER: "login.input_paceholder"
-  }
+  LOGIN: {
+    INPUT_PLACEHOLDER: "login.input_paceholder",
+  },
+  MEDIA: {
+    SELECT_MEDIA: "media.select_media",
+  },
 } as const;

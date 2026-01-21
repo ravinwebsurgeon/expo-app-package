@@ -1,19 +1,20 @@
 import { Theme, useTheme } from "@/src/theme";
 import {
-    horizontalScale,
-    moderateScale,
-    verticalScale,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
 } from "@/src/utils/scale";
-import React from "react";
+import React, { useMemo } from "react";
 import {
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from "react-native";
+import ThemeView from "../primitives/ThemeView";
 
 type ButtonVariant =
   | "default"
@@ -46,8 +47,8 @@ interface ButtonProps {
 const Button = ({
   title,
   onPress,
-  variant = "link",
-  size = "small",
+  variant = "default",
+  size = "medium",
   fullWidth = false,
   disabled = false,
   loading = false,
@@ -59,7 +60,7 @@ const Button = ({
   showShadow = false,
 }: ButtonProps) => {
   const theme = useTheme();
-  const styles = createStyles(theme);
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const containerStyles: ViewStyle[] = [
     styles.base,
@@ -91,15 +92,15 @@ const Button = ({
           color={
             variant === "outline" || variant === "link" || variant === "ghost"
               ? theme.colors.text.primary
-              : "#fff"
+              : theme.colors.white
           }
         />
       ) : (
-        <View style={styles.content}>
+        <ThemeView row>
           {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
           {title && <Text style={textStyles}>{title}</Text>}
           {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
-        </View>
+        </ThemeView>
       )}
     </TouchableOpacity>
   );
@@ -190,12 +191,6 @@ const createStyles = (theme: Theme) =>
     disabledText: { opacity: 0.7 },
 
     /* Layout */
-    content: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: horizontalScale(8),
-    },
-
     icon: {
       alignItems: "center",
       justifyContent: "center",

@@ -14,6 +14,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.expoapp.package",
+    infoPlist: {
+      NSCameraUsageDescription:
+        "This app needs access to camera to take profile photos.",
+      NSPhotoLibraryUsageDescription:
+        "This app needs access to photo library to select profile photos.",
+      NSPhotoLibraryAddUsageDescription:
+        "This app needs access to save photos to your library.",
+    },
   },
 
   android: {
@@ -36,6 +44,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-localization",
     "expo-router",
+    "@react-native-community/datetimepicker",
     [
       "expo-splash-screen",
       {
