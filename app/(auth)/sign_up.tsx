@@ -1,9 +1,10 @@
 import { ROUTES } from "@/constants/routes";
-import { LoginFormValues, loginSchema } from "@/services/schema/AuthSchema";
+import { SignupFormValues, signupSchema } from "@/services/schema/AuthSchema";
 import { ThemeText } from "@/src/components/primitives/ThemeText";
 import ThemeView from "@/src/components/primitives/ThemeView";
 import ScreenLayout from "@/src/components/shared/layout/screen_layout";
 import Button from "@/src/components/ui/button";
+import DatePickerComponent from "@/src/components/ui/date-picker";
 import Input from "@/src/components/ui/input";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { Theme, useTheme } from "@/src/theme";
@@ -20,30 +21,41 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Platform, StyleSheet, View } from "react-native";
 
-const LoginScreen = () => {
+const SignupScreen = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { control, handleSubmit } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const { control, handleSubmit } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
+      username: "",
+      birthday: undefined,
     },
   });
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const onSubmit = (data: LoginFormValues) => {};
+  const onSubmit = (data: SignupFormValues) => {};
+
   return (
     <ScreenLayout>
       <ThemeText align="center" variant="h4">
-        {t(LocalizedStrings.LOGIN.TITLE)}
+        {t(LocalizedStrings.SIGN_UP.TITLE)}
       </ThemeText>
 
       <ThemeView padded style={styles.contentContainer}>
         <ThemeView style={styles.form}>
+          <Input
+            control={control}
+            name="name"
+            label={t(LocalizedStrings.FORM.NAME)}
+            placeholder={t(LocalizedStrings.PLACEHOLDER.NAME)}
+          />
           <Input
             control={control}
             name="email"
@@ -54,24 +66,35 @@ const LoginScreen = () => {
 
           <Input
             control={control}
-            r
             name="password"
             secureTextEntry
             label={t(LocalizedStrings.FORM.PASSWORD)}
             placeholder={t(LocalizedStrings.PLACEHOLDER.PASSWORD)}
           />
 
-          <Button
-            title={t(LocalizedStrings.LOGIN.FORGOT_PASSWORD)}
-            fullWidth={false}
-            onPress={() => router.navigate(ROUTES.FORGOT_PASSWORD)}
-            variant="link"
-            size="small"
-            fontSize={moderateScale(14)}
-            style={{ alignSelf: "flex-end" }}
+          <Input
+            control={control}
+            name="confirmPassword"
+            secureTextEntry
+            label={t(LocalizedStrings.FORM.CONFIRM_PASSWORD)}
+            placeholder={t(LocalizedStrings.PLACEHOLDER.CONFIRM_PASSWORD)}
           />
+
+          <Input
+            control={control}
+            name="username"
+            label={t(LocalizedStrings.FORM.USERNAME)}
+            placeholder={t(LocalizedStrings.PLACEHOLDER.USERNAME)}
+          />
+
+          <DatePickerComponent
+            control={control}
+            name="birthday"
+            label={t(LocalizedStrings.FORM.BIRTHDAY)}
+          />
+
           <Button
-            title={t(LocalizedStrings.LOGIN.TITLE)}
+            title={t(LocalizedStrings.SIGN_UP.TITLE)}
             onPress={handleSubmit(onSubmit)}
           />
         </ThemeView>
@@ -80,9 +103,8 @@ const LoginScreen = () => {
           <ThemeText>{t(LocalizedStrings.EXTRAS.OR)}</ThemeText>
           <View style={styles.divider} />
         </ThemeView>
-        <ThemeView style={styles.btnContainer}>
+        <ThemeView row centered style={styles.btnContainer}>
           <Button
-            title="Login with Google"
             variant="ghost"
             size="large"
             showShadow
@@ -98,7 +120,6 @@ const LoginScreen = () => {
             fontSize={moderateScale(16)}
           />
           <Button
-            title="Login with Facebook"
             variant="ghost"
             size="large"
             showShadow
@@ -115,7 +136,6 @@ const LoginScreen = () => {
           />
           {Platform.OS === "ios" && (
             <Button
-              title="Login with Apple"
               size="large"
               variant="ghost"
               showShadow
@@ -134,11 +154,13 @@ const LoginScreen = () => {
         </ThemeView>
       </ThemeView>
       <ThemeView row centered>
-        <ThemeText>{t(LocalizedStrings.LOGIN.NEED_ACCOUNT)}</ThemeText>
+        <ThemeText>
+          {t(LocalizedStrings.SIGN_UP.ALREADY_HAVE_ACCOUNT)}
+        </ThemeText>
         <Button
-          title={t(LocalizedStrings.SIGN_UP.TITLE)}
+          title={t(LocalizedStrings.LOGIN.TITLE)}
           fullWidth={false}
-          onPress={() => router.replace(ROUTES.SIGN_UP)}
+          onPress={() => router.replace(ROUTES.LOGIN)}
           variant="link"
           size="small"
           fontSize={moderateScale(14)}
@@ -167,4 +189,4 @@ const createStyles = (theme: Theme) =>
     },
   });
 
-export default LoginScreen;
+export default SignupScreen;

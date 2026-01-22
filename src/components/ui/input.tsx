@@ -46,7 +46,7 @@ interface InputProps<T extends FieldValues> extends TextInputProps {
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
 }
 
-export const Input = <T extends FieldValues>({
+const Input = <T extends FieldValues>({
   control,
   name,
   rules,
@@ -124,9 +124,9 @@ export const Input = <T extends FieldValues>({
                   inputStyle,
                   multiline && styles.multiline,
                 ]}
-                placeholder={
-                  placeholder ?? t(LocalizedStrings.LOGIN.INPUT_PLACEHOLDER)
-                }
+                placeholder={t(
+                  placeholder ?? LocalizedStrings.PLACEHOLDER.TEXT,
+                )}
                 placeholderTextColor={
                   placeholderColor ?? theme.colors.inputPlaceHolder
                 }

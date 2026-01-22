@@ -1,29 +1,31 @@
 import { Theme, useTheme } from "@/src/theme";
 import {
-    horizontalScale,
-    moderateScale,
-    verticalScale,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
 } from "@/src/utils/scale";
 import Feather from "@expo/vector-icons/Feather";
 import DateTimePicker, {
-    DateTimePickerEvent,
+  DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import React, { useMemo, useState } from "react";
 import {
-    Control,
-    Controller,
-    FieldValues,
-    Path,
-    RegisterOptions,
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
 } from "react-hook-form";
 import {
-    Modal,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-    ViewStyle,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
 } from "react-native";
+import ThemeView from "../primitives/ThemeView";
+import { IconPosition } from "./input";
 
 export type DatePickerMode = "date" | "time" | "datetime";
 
@@ -41,6 +43,7 @@ interface DatePickerProps<T extends FieldValues> {
   inputStyle?: ViewStyle;
   errorStyle?: ViewStyle;
   icon?: React.ReactNode;
+  iconPosition?: IconPosition;
 }
 
 const DatePickerComponent = <T extends FieldValues>({
@@ -56,6 +59,7 @@ const DatePickerComponent = <T extends FieldValues>({
   containerStyle,
   inputStyle,
   icon,
+  iconPosition = "left",
 }: DatePickerProps<T>) => {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -94,17 +98,30 @@ const DatePickerComponent = <T extends FieldValues>({
               fieldState.error && styles.errorBorder,
             ]}
           >
-            <Text style={[styles.text, !value && styles.placeholder]}>
-              {formatValue(value)}
-            </Text>
+            <ThemeView row>
+              {iconPosition === "left"
+                ? (icon ?? (
+                    <Feather
+                      name={mode === "time" ? "clock" : "calendar"}
+                      size={moderateScale(18)}
+                      color={theme.colors.text.secondary}
+                    />
+                  ))
+                : null}
+              <Text style={[styles.text, !value && styles.placeholder]}>
+                {formatValue(value)}
+              </Text>
+            </ThemeView>
 
-            {icon ?? (
-              <Feather
-                name={mode === "time" ? "clock" : "calendar"}
-                size={moderateScale(18)}
-                color={theme.colors.text.secondary}
-              />
-            )}
+            {iconPosition === "right"
+              ? (icon ?? (
+                  <Feather
+                    name={mode === "time" ? "clock" : "calendar"}
+                    size={moderateScale(18)}
+                    color={theme.colors.text.secondary}
+                  />
+                ))
+              : null}
           </Pressable>
 
           <Modal

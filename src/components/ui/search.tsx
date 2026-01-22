@@ -8,13 +8,6 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Control,
-  Controller,
-  FieldValues,
-  Path,
-  RegisterOptions,
-} from "react-hook-form";
-import {
   StyleSheet,
   TextInput,
   TextInputProps,
@@ -24,12 +17,7 @@ import {
 import ThemeView from "../primitives/ThemeView";
 import { IconPosition } from "./input";
 
-interface SearchBarProps<
-  TFieldValues extends FieldValues,
-> extends TextInputProps {
-  control: Control<TFieldValues>;
-  name: Path<TFieldValues>;
-  rules?: RegisterOptions<TFieldValues>;
+interface SearchBarProps extends TextInputProps {
   debounceMs?: number;
   onSearch?: (value: string) => void;
   showSearchIcon?: boolean;
@@ -38,12 +26,10 @@ interface SearchBarProps<
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
   iconStyle?: TextStyle;
+  error?: boolean;
 }
 
-export const SearchBar = <TFieldValues extends FieldValues>({
-  control,
-  name,
-  rules,
+export const SearchBar = ({
   debounceMs = 400,
   onSearch,
   showSearchIcon = true,
@@ -52,86 +38,68 @@ export const SearchBar = <TFieldValues extends FieldValues>({
   containerStyle,
   inputStyle,
   iconStyle,
+  error,
   ...textInputProps
-}: SearchBarProps<TFieldValues>) => {
-  const [localValue, setLocalValue] = useState("");
-  const debouncedValue = useDebounce(localValue, debounceMs);
+}: SearchBarProps) => {
+  const [value, setValue] = useState("");
+  const debouncedValue = useDebounce(value, debounceMs);
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   useEffect(() => {
-    if (onSearch) {
-      onSearch(debouncedValue);
-    }
+    onSearch?.(debouncedValue);
   }, [debouncedValue, onSearch]);
 
+  const clearValue = () => {
+    setValue("");
+    onSearch?.("");
+  };
+
   return (
-    <Controller
-      control={control}
-      name={name}
-      rules={rules}
-      render={({ field: { value, onChange }, fieldState: { error } }) => {
-        const clearValue = () => {
-          setLocalValue("");
-          onChange("");
-          onSearch?.("");
-        };
+    <ThemeView
+      row
+      centered
+      rounded
+      backgroundColor={theme.colors.background.default}
+      style={[styles.container, containerStyle, error && styles.errorContainer]}
+    >
+      {showSearchIcon && searchIconPosition === "left" && (
+        <Ionicons
+          name="search"
+          size={moderateScale(18)}
+          color={theme.colors.inputPlaceHolder}
+          style={iconStyle}
+        />
+      )}
 
-        return (
-          <ThemeView
-            row
-            centered
-            rounded
-            backgroundColor={theme.colors.background.default}
-            style={[
-              styles.container,
-              containerStyle,
-              error && styles.errorContainer,
-            ]}
-          >
-            {showSearchIcon && searchIconPosition === "left" && (
-              <Ionicons
-                name="search"
-                size={moderateScale(18)}
-                color={theme.colors.inputPlaceHolder}
-                style={iconStyle}
-              />
-            )}
+      <TextInput
+        {...textInputProps}
+        value={value}
+        onChangeText={setValue}
+        style={[styles.input, inputStyle]}
+      />
 
-            <TextInput
-              {...textInputProps}
-              value={localValue}
-              onChangeText={(text) => {
-                setLocalValue(text);
-                onChange(text);
-              }}
-              style={[styles.input, inputStyle]}
-            />
+      {showClearButton && value.length > 0 && (
+        <Ionicons
+          name="close-circle"
+          size={18}
+          color={theme.colors.inputPlaceHolder}
+          style={iconStyle}
+          onPress={clearValue}
+          hitSlop={10}
+        />
+      )}
 
-            {showClearButton && localValue.length > 0 && (
-              <Ionicons
-                name="close-circle"
-                size={18}
-                color={theme.colors.inputPlaceHolder}
-                style={iconStyle}
-                onPress={clearValue}
-                hitSlop={10}
-              />
-            )}
-
-            {showSearchIcon && searchIconPosition === "right" && (
-              <Ionicons
-                name="search"
-                size={moderateScale(18)}
-                color={theme.colors.inputPlaceHolder}
-                style={iconStyle}
-                onPress={() => onSearch?.(debouncedValue)}
-              />
-            )}
-          </ThemeView>
-        );
-      }}
-    />
+      {showSearchIcon && searchIconPosition === "right" && (
+        <Ionicons
+          name="search"
+          size={moderateScale(18)}
+          color={theme.colors.inputPlaceHolder}
+          style={iconStyle}
+          onPress={() => onSearch?.(value)}
+        />
+      )}
+    </ThemeView>
   );
 };
 

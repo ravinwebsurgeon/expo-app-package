@@ -3,9 +3,105 @@
     "welcome": "Welcome"
   },
   "login": {
-    "input_paceholder": "Enter Text"
+    "title": "Login",
+    "description": "Login",
+    "need_account": "Need an account?",
+    "forgot_password": "Forgot Password?"
   },
-  "media": {
-    "select_media": "Select Media..."
+  "sign_up": {
+    "title": "Sign Up",
+    "description": "",
+    "already_have_account": "Already have an account?",
+    "create_account": "Create an account",
+    "create_new_account": "Create New Account"
+  },
+
+  "no_data_msg": {
+    "no_data_found": "No Data Found",
+    "no_result_found": "No Result Found"
+  },
+
+  "form": {
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "name": "Name",
+    "full_name": "Full Name",
+    "user_name": "Username",
+    "birthday": "Birthday",
+    "day": "Day",
+    "date": "Date",
+    "month": "Month",
+    "year": "Year"
+  },
+  "forgot_password": {
+    "title": "Forgot Password",
+    "send_code": "Send Code",
+    "reset_password": "Reset Password"
+  },
+
+  "verify_otp": {
+    "title": "Check your email",
+    "description": "Enter 5 digit code that mentioned in the phonenumber",
+    "resend": "Resend",
+    "otp_not_received": "Haven’t got the OTP yet?"
+  },
+
+  "placeholder": {
+    "email": "Enter Email",
+    "password": "Enter Password",
+    "confirm_password": "Enter Confirm Password",
+    "name": "Enter Name",
+    "full_name": "Enter Full Name",
+    "user_name": "Enter Username",
+    "select_media": "Select Media...",
+    "search": "Search...",
+    "text": "Enter Text",
+    "select": "Select..."
+  },
+
+  "extras": {
+    "or": "Or"
+  },
+
+  "error": {},
+
+  "validate": {
+    "email": {
+      "required": "Email is required",
+      "invalid": "Please enter a valid email address"
+    },
+    "password": {
+      "required": "Password is required",
+      "min_length": "Password must be at least 8 characters",
+      "weak": "Password is too weak"
+    },
+    "confirm_password": {
+      "required": "Confirm password is required",
+      "not_match": "Passwords do not match"
+    },
+    "name": {
+      "required": "Name is required",
+      "min_length": "Name must be at least 2 characters"
+    },
+    "username": {
+      "required": "Username is required",
+      "invalid": "Username can only contain letters, numbers, and underscores",
+      "min_length": "Username must be at least 3 characters"
+    },
+    "full_name": {
+      "required": "Full name is required"
+    },
+    "birthday": {
+      "required": "Birthday is required",
+      "invalid": "Please enter a valid date",
+      "underage": "You must be at least 18 years old",
+      "min_age": "You must be at least 13 years old"
+    },
+    "otp": {
+      "required": "OTP is required",
+      "invalid": "Invalid OTP",
+      "length": "OTP must be 5 digits"
+    }
   }
 }

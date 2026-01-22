@@ -15,9 +15,47 @@ export default function AuthLayout() {
       }}
     >
       <Stack.Screen
-        name="auth-start"
+        name="welcome"
         options={{
-          title: "Auth Start",
+          title: "Welcome",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="login"
+        options={{
+          title: "Login",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="sign_up"
+        options={{
+          title: "Sign Up",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="forgot_password"
+        options={{
+          title: "Forgot Password",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="reset_password"
+        options={{
+          title: "Reset Password",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="verify_otp"
+        options={{
+          title: "Verify OTP",
           headerShown: false,
         }}
       />
