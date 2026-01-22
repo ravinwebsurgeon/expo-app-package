@@ -149,25 +149,35 @@ const CustomSlider = ({
               minimumValue={min}
               maximumValue={rangeValue[1]}
               step={step}
-              minimumTrackTintColor={theme.colors.primary.main}
-              maximumTrackTintColor={theme.colors.gray[200]}
+              minimumTrackTintColor={theme.colors.gray[200]}
+              maximumTrackTintColor={theme.colors.primary.main}
               value={rangeValue[0]}
               onValueChange={(v) =>
-                onRangeChange?.(normalizeRange([v, rangeValue[1]], min, max))
+                onRangeChange?.(
+                  normalizeRange(
+                    [Math.min(v, rangeValue[1]), rangeValue[1]],
+                    min,
+                    max,
+                  ),
+                )
               }
             />
 
             {/* UPPER SLIDER */}
             <Slider
-            inverted
               minimumValue={rangeValue[0]}
+              inverted
               maximumValue={max}
               step={step}
-              minimumTrackTintColor={theme.colors.primary.main}
-              maximumTrackTintColor={theme.colors.gray[200]}
               value={rangeValue[1]}
               onValueChange={(v) =>
-                onRangeChange?.(normalizeRange([rangeValue[0], v], min, max))
+                onRangeChange?.(
+                  normalizeRange(
+                    [rangeValue[0], Math.max(v, rangeValue[0])],
+                    min,
+                    max,
+                  ),
+                )
               }
             />
           </View>

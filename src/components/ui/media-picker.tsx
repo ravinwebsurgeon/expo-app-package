@@ -84,7 +84,7 @@ const MediaPicker = ({
         />
 
         <Text style={styles.overlayText}>
-          {t(placeholder ?? LocalizedStrings.MEDIA.SELECT_MEDIA)}
+          {t(placeholder ?? LocalizedStrings.PLACEHOLDER.SELECT_MEDIA)}
         </Text>
       </Pressable>
     </View>

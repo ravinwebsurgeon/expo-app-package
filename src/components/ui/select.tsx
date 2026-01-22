@@ -1,30 +1,30 @@
 import { Theme, useTheme } from "@/src/theme";
 import {
-    horizontalScale,
-    moderateScale,
-    verticalScale,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
 } from "@/src/utils/scale";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
-    Control,
-    Controller,
-    FieldValues,
-    Path,
-    RegisterOptions,
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
 } from "react-hook-form";
 import {
-    FlatList,
-    LayoutRectangle,
-    Modal,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TextStyle,
-    TouchableOpacityProps,
-    View,
-    ViewStyle,
+  FlatList,
+  LayoutRectangle,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextStyle,
+  TouchableOpacityProps,
+  View,
+  ViewStyle,
 } from "react-native";
 import ThemeView from "../primitives/ThemeView";
 
@@ -174,7 +174,10 @@ export const Select = <TFieldValues extends FieldValues, TValue = string>({
               animationType="fade"
               onRequestClose={handleClose}
             >
-              <Pressable style={{ marginVertical: 10 }} onPress={handleClose} />
+              <Pressable
+                style={StyleSheet.absoluteFill}
+                onPress={handleClose}
+              />
 
               <View
                 style={[

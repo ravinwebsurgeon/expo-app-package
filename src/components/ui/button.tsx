@@ -1,4 +1,5 @@
 import { Theme, useTheme } from "@/src/theme";
+import { FontWeight } from "@/src/theme/tokens/typography";
 import {
   horizontalScale,
   moderateScale,
@@ -42,6 +43,7 @@ interface ButtonProps {
   fontSize?: number;
   textColor?: string;
   showShadow?: boolean;
+  fontWeight?: FontWeight;
 }
 
 const Button = ({
@@ -57,6 +59,7 @@ const Button = ({
   style,
   fontSize,
   textColor,
+  fontWeight,
   showShadow = false,
 }: ButtonProps) => {
   const theme = useTheme();
@@ -67,15 +70,22 @@ const Button = ({
     styles[variant],
     styles[size],
     fullWidth && styles.fullWidth,
-    showShadow && styles.shadow,
+    showShadow && {
+      ...styles.shadow,
+      ...(variant === "ghost" || variant === "link"
+        ? { backgroundColor: theme.colors.background.default }
+        : {}),
+    },
     disabled && styles.disabled,
     style,
   ];
 
   const textStyles: TextStyle[] = [
-    styles.text,
     styles[`${variant}Text`],
-    { fontSize: fontSize ?? 18 },
+    {
+      fontSize: fontSize ?? moderateScale(18),
+      fontWeight: fontWeight ?? "600",
+    },
     textColor && { color: textColor },
     disabled && styles.disabledText,
   ];
@@ -156,6 +166,7 @@ const createStyles = (theme: Theme) =>
 
     ghost: {
       backgroundColor: "transparent",
+      shadowColor: theme.colors.text.primary,
     },
 
     link: {
@@ -165,7 +176,7 @@ const createStyles = (theme: Theme) =>
 
     /* Text */
     text: {
-      fontWeight: "600",
+      fontWeight: "100",
     },
 
     defaultText: { color: theme.colors.white },
