@@ -38,6 +38,7 @@ type AuthActions = {
   verifyOtp: (phoneNumber: string, otp: string) => Promise<void>;
   resendOtp: (phoneNumber: string) => Promise<string>;
   logout: () => Promise<string>;
+  resetStore: () => void;
 };
 
 const initialState: AuthState = {
@@ -249,7 +250,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       clearError: () => set({ error: null }),
 
-      reset: () => set(initialState),
+      resetStore: () => set(initialState),
     }),
     {
       name: "auth-store",
