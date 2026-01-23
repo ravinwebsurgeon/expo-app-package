@@ -26,7 +26,7 @@ interface OTPInputProps<T extends FieldValues> {
 const OTPInput = <T extends FieldValues>({
   control,
   name,
-  length = 5,
+  length = 6,
   containerStyle,
   inputStyle,
   disabled = false,

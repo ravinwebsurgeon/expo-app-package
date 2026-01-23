@@ -32,7 +32,8 @@
     "day": "Day",
     "date": "Date",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "phone": "Phone Number"
   },
   "forgot_password": {
     "title": "Forgot Password",
@@ -41,8 +42,8 @@
   },
 
   "verify_otp": {
-    "title": "Check your email",
-    "description": "Enter 5 digit code that mentioned in the phonenumber",
+    "title": "Check your phone",
+    "description": "Enter 6 digit code that mentioned in the phone number",
     "resend": "Resend",
     "otp_not_received": "Haven’t got the OTP yet?"
   },
@@ -57,14 +58,24 @@
     "select_media": "Select Media...",
     "search": "Search...",
     "text": "Enter Text",
-    "select": "Select..."
+    "select": "Select...",
+    "phone": "Enter Phone Number"
   },
 
   "extras": {
-    "or": "Or"
+    "or": "Or",
+    "logout": "LOGOUT"
   },
 
-  "error": {},
+  "error": {
+    "login": "Login failed",
+    "signup": "Signup failed",
+    "forgot_password": "Forgot Password Failed",
+    "reset_password": "Reset Password Failed",
+    "verify_otp": "Verify OTP Failed",
+    "resend_otp": "Resend OTP Failed",
+    "logout": "Logout Failed"
+  },
 
   "validate": {
     "email": {
@@ -101,7 +112,11 @@
     "otp": {
       "required": "OTP is required",
       "invalid": "Invalid OTP",
-      "length": "OTP must be 5 digits"
+      "length": "OTP must be 6 digits"
+    },
+    "phone": {
+      "required": "Phone number is required",
+      "invalid": "Please enter a phone number"
     }
   }
 }

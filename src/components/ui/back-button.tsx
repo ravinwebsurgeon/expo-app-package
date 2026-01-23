@@ -1,16 +1,16 @@
 import { useTheme } from "@/src/theme";
 import {
-    horizontalScale,
-    moderateScale,
-    verticalScale,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
 } from "@/src/utils/scale";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import {
-    StyleSheet,
-    TouchableOpacity,
-    type StyleProp,
-    type ViewStyle,
+  StyleSheet,
+  TouchableOpacity,
+  type StyleProp,
+  type ViewStyle,
 } from "react-native";
 
 export interface BackButtonProps {
@@ -20,7 +20,7 @@ export interface BackButtonProps {
   iconSize?: number;
 }
 
-export const BackButton: React.FC<BackButtonProps> = ({
+const BackButton: React.FC<BackButtonProps> = ({
   onPress,
   style,
   iconColor,

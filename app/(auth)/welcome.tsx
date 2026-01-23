@@ -16,12 +16,12 @@ const WelcomeScreen = () => {
       <ThemeView padded style={styles.container}>
         <Button
           title={t(LocalizedStrings.SIGN_UP.CREATE_NEW_ACCOUNT)}
-          onPress={() => router.replace(ROUTES.SIGN_UP)}
+          onPress={() => router.replace(ROUTES.AUTH.SIGN_UP)}
         />
         <ThemeText align="center">
           {t(LocalizedStrings.SIGN_UP.ALREADY_HAVE_ACCOUNT)}
         </ThemeText>
-        <Button title="Login" onPress={() => router.replace(ROUTES.LOGIN)} />
+        <Button title="Login" onPress={() => router.replace(ROUTES.AUTH.LOGIN)} />
       </ThemeView>
     </ScreenLayout>
   );

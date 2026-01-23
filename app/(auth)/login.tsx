@@ -12,13 +12,14 @@ import {
   moderateScale,
   verticalScale,
 } from "@/src/utils/scale";
+import { useAuthStore } from "@/stores/authStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Platform, StyleSheet, View } from "react-native";
+import { Alert, Platform, StyleSheet, View } from "react-native";
 
 const LoginScreen = () => {
   const { t } = useTranslation();
@@ -33,11 +34,20 @@ const LoginScreen = () => {
     },
   });
 
+  const { login, isLoading } = useAuthStore();
+
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const onSubmit = (data: LoginFormValues) => {};
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      await login(data);
+        router.navigate(ROUTES.APP.HOME);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
   return (
-    <ScreenLayout>
+    <ScreenLayout showLoader={isLoading}>
       <ThemeText align="center" variant="h4">
         {t(LocalizedStrings.LOGIN.TITLE)}
       </ThemeText>
@@ -54,7 +64,6 @@ const LoginScreen = () => {
 
           <Input
             control={control}
-            r
             name="password"
             secureTextEntry
             label={t(LocalizedStrings.FORM.PASSWORD)}
@@ -64,7 +73,7 @@ const LoginScreen = () => {
           <Button
             title={t(LocalizedStrings.LOGIN.FORGOT_PASSWORD)}
             fullWidth={false}
-            onPress={() => router.navigate(ROUTES.FORGOT_PASSWORD)}
+            onPress={() => router.navigate(ROUTES.AUTH.FORGOT_PASSWORD)}
             variant="link"
             size="small"
             fontSize={moderateScale(14)}
@@ -73,6 +82,7 @@ const LoginScreen = () => {
           <Button
             title={t(LocalizedStrings.LOGIN.TITLE)}
             onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
           />
         </ThemeView>
         <ThemeView row centered padded>
@@ -138,7 +148,7 @@ const LoginScreen = () => {
         <Button
           title={t(LocalizedStrings.SIGN_UP.TITLE)}
           fullWidth={false}
-          onPress={() => router.replace(ROUTES.SIGN_UP)}
+          onPress={() => router.replace(ROUTES.AUTH.SIGN_UP)}
           variant="link"
           size="small"
           fontSize={moderateScale(14)}

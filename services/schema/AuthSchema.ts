@@ -9,10 +9,14 @@ export const signupBaseSchema = z.object({
     .min(1, LocalizedStrings.VALIDATE.EMAIL.REQUIRED)
     .email(LocalizedStrings.VALIDATE.EMAIL.INVALID),
 
-  password: z.string().min(8, LocalizedStrings.VALIDATE.PASSWORD.MIN_LENGTH),
+  password: z
+    .string()
+    .min(1, LocalizedStrings.VALIDATE.PASSWORD.REQUIRED)
+    .min(8, LocalizedStrings.VALIDATE.PASSWORD.MIN_LENGTH),
 
   confirmPassword: z
     .string()
+    .nonempty(LocalizedStrings.VALIDATE.CONFIRM_PASSWORD.REQUIRED)
     .min(1, LocalizedStrings.VALIDATE.CONFIRM_PASSWORD.REQUIRED),
 
   username: z
@@ -20,6 +24,13 @@ export const signupBaseSchema = z.object({
     .min(3, LocalizedStrings.VALIDATE.USERNAME.MIN_LENGTH)
     .regex(/^[a-zA-Z0-9_]+$/, LocalizedStrings.VALIDATE.USERNAME.INVALID),
 
+  phoneNumber: z
+    .string()
+    .nonempty(LocalizedStrings.VALIDATE.PHONE.REQUIRED)
+    .regex(/^\+?[1-9]\d{7,14}$/, LocalizedStrings.VALIDATE.PHONE.INVALID),
+
+  countryCode: z.string(),
+  
   birthday: z
     .date({
       error: LocalizedStrings.VALIDATE.BIRTHDAY.REQUIRED,
@@ -37,7 +48,13 @@ export const signupBaseSchema = z.object({
     }, LocalizedStrings.VALIDATE.BIRTHDAY.MIN_AGE),
 });
 
-export const signupSchema = signupBaseSchema.superRefine((data, ctx) => {
+const passwordMatchRefine = (
+  data: {
+    password: string;
+    confirmPassword: string;
+  },
+  ctx: z.RefinementCtx,
+) => {
   if (data.password !== data.confirmPassword) {
     ctx.addIssue({
       code: "custom",
@@ -45,10 +62,12 @@ export const signupSchema = signupBaseSchema.superRefine((data, ctx) => {
       message: LocalizedStrings.VALIDATE.CONFIRM_PASSWORD.NOT_MATCH,
     });
   }
-});
+};
+
+export const signupSchema = signupBaseSchema.superRefine(passwordMatchRefine);
 
 export const verifyOtpSchema = z.object({
-  otp: z.string().length(5, LocalizedStrings.VALIDATE.OTP.LENGTH),
+  otp: z.string().length(6, LocalizedStrings.VALIDATE.OTP.LENGTH),
 });
 
 export const loginSchema = signupBaseSchema.pick({
@@ -57,13 +76,16 @@ export const loginSchema = signupBaseSchema.pick({
 });
 
 export const forgotPasswordSchema = signupBaseSchema.pick({
-  email: true,
+  phoneNumber: true,
 });
 
-export const resetPasswordSchema = signupBaseSchema.pick({
-  password: true,
-  confirmPassword: true,
-});
+export const resetPasswordSchema = signupBaseSchema
+  .pick({
+    password: true,
+    confirmPassword: true,
+  })
+  .superRefine(passwordMatchRefine);
+
 export type SignupFormValues = z.infer<typeof signupSchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
