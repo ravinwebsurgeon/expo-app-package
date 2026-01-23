@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { ColorPalette } from "./tokens/colors";
-import { useThemeStore } from "../store/themeStore";
+import { useThemeStore } from "../../stores/themeStore";
 import { ThemeContext } from "../context/theme";
+import { ColorPalette } from "./tokens/colors";
 
 // Hook to access the entire theme
 export const useTheme = () => {
@@ -27,7 +27,9 @@ export const useTextColor = (
 };
 
 // Hook to get background color based on theme
-export const useBackgroundColor = (variant: "default" | "paper" | "elevated" = "default") => {
+export const useBackgroundColor = (
+  variant: "default" | "paper" | "elevated" = "default",
+) => {
   const theme = useTheme();
   return theme.colors.background[variant];
 };
@@ -70,7 +72,10 @@ export type UseThemeColorProps = { light?: string; dark?: string };
  * A hook to get a specific color from the theme, with an option to override via props.
  * Useful for components that need a specific color that might also be customizable.
  */
-export function useThemeColor(props: UseThemeColorProps, colorName: keyof ColorPalette): string {
+export function useThemeColor(
+  props: UseThemeColorProps,
+  colorName: keyof ColorPalette,
+): string {
   const theme = useTheme();
   const colorFromProps = props[theme.mode as keyof UseThemeColorProps];
 

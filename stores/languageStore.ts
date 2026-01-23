@@ -1,6 +1,6 @@
 import { persist } from "zustand/middleware";
-import i18n from "../i18n";
 import { create, mmkvJSONStateStorage } from "../services/storage/mmkvStorage";
+import i18n from "../src/i18n";
 
 export type LanguageOption = {
   code: string; // i18n language code

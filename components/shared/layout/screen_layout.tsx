@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  ViewStyle
+  ViewStyle,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../ui/back-button";
