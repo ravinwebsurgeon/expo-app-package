@@ -1,7 +1,10 @@
 // src/context/LanguageContext.ts
 import React, { createContext, useContext, useEffect, useMemo } from "react";
+import {
+  SUPPORTED_LANGUAGES,
+  useLanguageStore,
+} from "../../stores/languageStore";
 import i18n from "../i18n";
-import { SUPPORTED_LANGUAGES, useLanguageStore } from "../store/languageStore";
 interface LanguageContextType {
   language: string;
   setLanguage: (code: string) => void;

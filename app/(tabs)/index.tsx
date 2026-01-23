@@ -1,5 +1,5 @@
-import ScreenLayout from "@/src/components/shared/layout/screen_layout";
-import Button from "@/src/components/ui/button";
+import ScreenLayout from "@/components/shared/layout/screen_layout";
+import Button from "@/components/ui/button";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { useAuthStore } from "@/stores/authStore";
 import { router } from "expo-router";

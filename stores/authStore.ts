@@ -10,10 +10,9 @@ import {
   verifyOtpApi,
 } from "@/services/api/auth";
 import { LoginFormValues } from "@/services/schema/AuthSchema";
+import { create, mmkvJSONStateStorage } from "@/services/storage/mmkvStorage";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
-import { mmkvJSONStateStorage } from "@/src/services/storage/mmkvStorage";
 import { t } from "i18next";
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type AuthState = {

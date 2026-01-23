@@ -1,12 +1,12 @@
+import { ThemeText } from "@/components/primitives/ThemeText";
+import ThemeView from "@/components/primitives/ThemeView";
+import ScreenLayout from "@/components/shared/layout/screen_layout";
+import Button from "@/components/ui/button";
+import DatePickerComponent from "@/components/ui/date-picker";
+import Input from "@/components/ui/input";
 import { ROUTES } from "@/constants/routes";
 import { SignupRequest } from "@/services/api/auth";
 import { SignupFormValues, signupSchema } from "@/services/schema/AuthSchema";
-import { ThemeText } from "@/src/components/primitives/ThemeText";
-import ThemeView from "@/src/components/primitives/ThemeView";
-import ScreenLayout from "@/src/components/shared/layout/screen_layout";
-import Button from "@/src/components/ui/button";
-import DatePickerComponent from "@/src/components/ui/date-picker";
-import Input from "@/src/components/ui/input";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { Theme, useTheme } from "@/src/theme";
 import {
