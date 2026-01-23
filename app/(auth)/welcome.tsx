@@ -1,8 +1,8 @@
+import { ThemeText } from "@/components/primitives/ThemeText";
+import ThemeView from "@/components/primitives/ThemeView";
+import ScreenLayout from "@/components/shared/layout/screen_layout";
+import Button from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
-import { ThemeText } from "@/src/components/primitives/ThemeText";
-import ThemeView from "@/src/components/primitives/ThemeView";
-import ScreenLayout from "@/src/components/shared/layout/screen_layout";
-import Button from "@/src/components/ui/button";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { verticalScale } from "@/src/utils/scale";
 import { router } from "expo-router";
@@ -21,7 +21,10 @@ const WelcomeScreen = () => {
         <ThemeText align="center">
           {t(LocalizedStrings.SIGN_UP.ALREADY_HAVE_ACCOUNT)}
         </ThemeText>
-        <Button title="Login" onPress={() => router.replace(ROUTES.AUTH.LOGIN)} />
+        <Button
+          title="Login"
+          onPress={() => router.replace(ROUTES.AUTH.RESET_PASSWORD)}
+        />
       </ThemeView>
     </ScreenLayout>
   );

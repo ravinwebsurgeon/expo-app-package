@@ -2,7 +2,7 @@ import { getCsrfToken } from "@/services/api/auth";
 import { setCSRFToken } from "@/services/api/tokens";
 import { LanguageProvider } from "@/src/context/language";
 import { ThemeProvider } from "@/src/context/theme";
-import { useThemeStore } from "@/src/store/themeStore";
+import { useThemeStore } from "@/stores/themeStore";
 
 import {
   DarkTheme,

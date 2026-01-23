@@ -1,10 +1,10 @@
+import { ThemeText } from "@/components/primitives/ThemeText";
+import ThemeView from "@/components/primitives/ThemeView";
+import ScreenLayout from "@/components/shared/layout/screen_layout";
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
 import { ROUTES } from "@/constants/routes";
 import { LoginFormValues, loginSchema } from "@/services/schema/AuthSchema";
-import { ThemeText } from "@/src/components/primitives/ThemeText";
-import ThemeView from "@/src/components/primitives/ThemeView";
-import ScreenLayout from "@/src/components/shared/layout/screen_layout";
-import Button from "@/src/components/ui/button";
-import Input from "@/src/components/ui/input";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { Theme, useTheme } from "@/src/theme";
 import {
@@ -41,7 +41,7 @@ const LoginScreen = () => {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await login(data);
-        router.navigate(ROUTES.APP.HOME);
+      router.navigate(ROUTES.APP.HOME);
     } catch (error) {
       Alert.alert(error.message);
     }
