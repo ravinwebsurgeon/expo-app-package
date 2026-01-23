@@ -118,6 +118,7 @@ const Input = <T extends FieldValues>({
                 onBlur={field.onBlur}
                 editable={editable}
                 multiline={multiline}
+            
                 secureTextEntry={secureTextEntry && !showPassword}
                 style={[
                   styles.input,

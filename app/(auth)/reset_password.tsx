@@ -1,6 +1,7 @@
+import { ROUTES } from "@/constants/routes";
 import {
-    ResetPasswordFormValues,
-    resetPasswordSchema
+  ResetPasswordFormValues,
+  resetPasswordSchema,
 } from "@/services/schema/AuthSchema";
 import { ThemeText } from "@/src/components/primitives/ThemeText";
 import ThemeView from "@/src/components/primitives/ThemeView";
@@ -10,18 +11,25 @@ import Input from "@/src/components/ui/input";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { Theme, useTheme } from "@/src/theme";
 import { horizontalScale, verticalScale } from "@/src/utils/scale";
+import { useAuthStore } from "@/stores/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router, useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 
 const ResetPasswordScreen = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { phoneNumber, otp } = useLocalSearchParams<{
+    phoneNumber?: string;
+    otp?: string;
+  }>();
+  const { resetPassword, isLoading } = useAuthStore();
   const { control, handleSubmit } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
       password: "",
@@ -31,11 +39,21 @@ const ResetPasswordScreen = () => {
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const onSubmit = (data: ResetPasswordFormValues) => {
-    console.log("Data====", data);
+  const onSubmit = async (data: ResetPasswordFormValues) => {
+    try {
+      const responseMsg = await resetPassword(
+        "8950142325",
+        "111111",
+        data.password,
+      );
+      Alert.alert(responseMsg);
+      router.replace(ROUTES.AUTH.LOGIN);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
   return (
-    <ScreenLayout showBackButton>
+    <ScreenLayout showBackButton showLoader={isLoading}>
       <ThemeText align="center" variant="h4">
         {t(LocalizedStrings.FORGOT_PASSWORD.RESET_PASSWORD)}
       </ThemeText>
@@ -59,6 +77,7 @@ const ResetPasswordScreen = () => {
         />
         <Button
           title={t(LocalizedStrings.FORGOT_PASSWORD.RESET_PASSWORD)}
+          loading={isLoading}
           onPress={handleSubmit(onSubmit)}
         />
       </ThemeView>

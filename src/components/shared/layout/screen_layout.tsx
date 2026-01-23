@@ -1,5 +1,6 @@
 import { Theme, useTheme } from "@/src/theme";
 import { horizontalScale, verticalScale } from "@/src/utils/scale";
+import { router } from "expo-router";
 import React, { ReactNode, useMemo } from "react";
 import {
   ImageBackground,
@@ -9,11 +10,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  ViewStyle,
+  ViewStyle
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../ui/back-button";
-import { router } from "expo-router";
+import Loader from "../../ui/loader";
 
 interface ScreenLayoutProps {
   children: ReactNode;
@@ -25,6 +26,7 @@ interface ScreenLayoutProps {
   backgroundImageResizeMode?: ImageResizeMode;
   backgroundColor?: string;
   showBackButton?: boolean;
+  showLoader?: boolean;
 }
 
 const ScreenLayout: React.FC<ScreenLayoutProps> = ({
@@ -37,38 +39,46 @@ const ScreenLayout: React.FC<ScreenLayoutProps> = ({
   backgroundImageResizeMode = "cover",
   backgroundColor,
   showBackButton = false,
+  showLoader = false,
 }) => {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      style={[styles.container, style]}
-    >
-      {backgroundImage && (
-        <ImageBackground
-          source={backgroundImage}
-          resizeMode={backgroundImageResizeMode}
-          style={styles.background}
-        />
-      )}
-      {showBackButton && <BackButton onPress={router.back} style={styles.backButton} />}
-      <ScrollView
-        contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
-        keyboardShouldPersistTaps="handled"
-        scrollEnabled={scrollEnabled}
-        style={
-          !backgroundImage && {
-            backgroundColor: backgroundColor ?? theme.colors.background.default,
-          }
-        } // make ScrollView transparent
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        style={[styles.container, style]}
       >
-        <SafeAreaView style={{ backgroundColor: "transparent", flex: 1 }}>
-          {children}
-        </SafeAreaView>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        {backgroundImage && (
+          <ImageBackground
+            source={backgroundImage}
+            resizeMode={backgroundImageResizeMode}
+            style={styles.background}
+          />
+        )}
+        {showBackButton && (
+          <BackButton onPress={router.back} style={styles.backButton} />
+        )}
+        <ScrollView
+          contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
+          keyboardShouldPersistTaps="handled"
+          scrollEnabled={scrollEnabled}
+          style={
+            !backgroundImage && {
+              backgroundColor:
+                backgroundColor ?? theme.colors.background.default,
+            }
+          } // make ScrollView transparent
+        >
+          <SafeAreaView style={{ backgroundColor: "transparent", flex: 1 }}>
+            {children}
+          </SafeAreaView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      {showLoader && <Loader />}
+    </>
   );
 };
 
@@ -91,7 +101,7 @@ const createStyles = (theme: Theme) =>
     backButton: {
       top: verticalScale(50),
       marginHorizontal: horizontalScale(10),
-      zIndex:1,
+      zIndex: 1,
     },
   });
 

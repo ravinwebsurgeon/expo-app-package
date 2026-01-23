@@ -1,7 +1,7 @@
 import { ROUTES } from "@/constants/routes";
 import {
-    VerifyOtpFormValues,
-    verifyOtpSchema,
+  VerifyOtpFormValues,
+  verifyOtpSchema,
 } from "@/services/schema/AuthSchema";
 import { ThemeText } from "@/src/components/primitives/ThemeText";
 import ThemeView from "@/src/components/primitives/ThemeView";
@@ -11,25 +11,27 @@ import OTPInput from "@/src/components/ui/otp_input";
 import { LocalizedStrings } from "@/src/i18n/localizedStrings";
 import { Theme, useTheme } from "@/src/theme";
 import {
-    horizontalScale,
-    moderateScale,
-    verticalScale,
+  horizontalScale,
+  moderateScale,
+  verticalScale,
 } from "@/src/utils/scale";
+import { useAuthStore } from "@/stores/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 
 const VerifyOtpScreen = () => {
   const RESEND_OTP_TIME = 30;
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
 
   const { t } = useTranslation();
   const theme = useTheme();
   const [timer, setTimer] = useState(RESEND_OTP_TIME);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const { verifyOtp, resendOtp, isLoading, error } = useAuthStore();
   const { control, handleSubmit } = useForm<VerifyOtpFormValues>({
     resolver: zodResolver(verifyOtpSchema),
     mode: "onChange",
@@ -54,19 +56,31 @@ const VerifyOtpScreen = () => {
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const handleResend = () => {
-    console.log("Resend OTP to:", email);
-    // Call API to resend OTP here
-    setTimer(RESEND_OTP_TIME);
-    setIsResendDisabled(true);
+  const onSubmit = async (data: VerifyOtpFormValues) => {
+    try {
+      await verifyOtp("8950142325", data.otp);
+
+      router.push({
+        pathname: ROUTES.AUTH.RESET_PASSWORD,
+        params: { phoneNumber, otp: data.otp },
+      });
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Data====", data);
-    router.navigate(ROUTES.RESET_PASSWORD);
-  };
+  const handleResendOtp = useCallback(async () => {
+    try {
+      const responseMsg = await resendOtp(phoneNumber);
+      setTimer(RESEND_OTP_TIME);
+      setIsResendDisabled(true);
+      Alert.alert(responseMsg);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  }, [isResendDisabled]);
   return (
-    <ScreenLayout showBackButton>
+    <ScreenLayout showBackButton showLoader={isLoading}>
       <ThemeText align="center" variant="h4">
         {t(LocalizedStrings.VERIFY_OTP.TITLE)}
       </ThemeText>
@@ -75,6 +89,7 @@ const VerifyOtpScreen = () => {
         <OTPInput control={control} name="otp" />
         <Button
           title={t(LocalizedStrings.FORGOT_PASSWORD.SEND_CODE)}
+          loading={isLoading}
           onPress={handleSubmit(onSubmit)}
         />
       </ThemeView>
@@ -84,7 +99,7 @@ const VerifyOtpScreen = () => {
           <Button
             title={t(LocalizedStrings.VERIFY_OTP.RESEND)}
             fullWidth={false}
-            onPress={handleResend}
+            onPress={handleResendOtp}
             variant="link"
             size="small"
             fontSize={moderateScale(14)}

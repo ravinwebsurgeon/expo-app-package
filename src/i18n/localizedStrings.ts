@@ -28,6 +28,7 @@ export const LocalizedStrings = {
     DAY: "form.day",
     MONTH: "form.month",
     YEAR: "form.year",
+    PHONE: "form.phone",
   },
   FORGOT_PASSWORD: {
     TITLE: "forgot_password.title",
@@ -52,10 +53,21 @@ export const LocalizedStrings = {
     SEARCH: "placeholder.search",
     TEXT: "placeholder.text",
     SELECT: "placeholder.select",
+    PHONE: "placeholder.phone",
   },
 
+  ERROR: {
+    LOGIN: "error.login",
+    SIGNUP: "error.signup",
+    FORGOT_PASSWORD: "error.forgot_password",
+    RESET_PASSWORD: "error.reset_password",
+    VERIFY_OTP: "error.verify_otp",
+    RESEND_OTP: "error.resend_otp",
+    LOGOUT: "error.logout",
+  },
   EXTRAS: {
     OR: "extras.or",
+    LOGOUT: "extras.logout",
   },
 
   VALIDATE: {
@@ -94,7 +106,10 @@ export const LocalizedStrings = {
       REQUIRED: "validate.otp.required",
       INVALID: "validate.otp.invalid",
       LENGTH: "validate.otp.length",
-      
+    },
+    PHONE: {
+      REQUIRED: "validate.phone.required",
+      INVALID: "validate.phone.invalid",
     },
   },
 };

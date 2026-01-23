@@ -1,4 +1,5 @@
 import { ROUTES } from "@/constants/routes";
+import { SignupRequest } from "@/services/api/auth";
 import { SignupFormValues, signupSchema } from "@/services/schema/AuthSchema";
 import { ThemeText } from "@/src/components/primitives/ThemeText";
 import ThemeView from "@/src/components/primitives/ThemeView";
@@ -13,17 +14,21 @@ import {
   moderateScale,
   verticalScale,
 } from "@/src/utils/scale";
+import { useAuthStore } from "@/stores/authStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getLocales } from "expo-localization";
 import { router } from "expo-router";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Platform, StyleSheet, View } from "react-native";
+import { Alert, Platform, StyleSheet, View } from "react-native";
 
 const SignupScreen = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { signup, error, isLoading } = useAuthStore();
+  const deviceCountryCode = useMemo(() => getLocales()?.[0]?.regionCode, []);
   const { control, handleSubmit } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
@@ -35,15 +40,36 @@ const SignupScreen = () => {
       confirmPassword: "",
       username: "",
       birthday: undefined,
+      phoneNumber: "",
+      countryCode: deviceCountryCode ?? "+91",
     },
   });
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const onSubmit = (data: SignupFormValues) => {};
+  const onSubmit = async (data: SignupFormValues) => {
+    const [firstName, ...rest] = (data.name || "").trim().split(/\s+/);
+    const lastName = rest.join(" ");
+    const dob = data.birthday.toISOString();
+
+    const request: SignupRequest = {
+      email: data.email,
+      password: data.password,
+      firstName,
+      lastName,
+      username: data.username,
+      dob,
+      phoneNumber: data.phoneNumber,
+    };
+    try {
+      await signup(request);
+    } catch (error) {
+      Alert.alert(error.errorMessage);
+    }
+  };
 
   return (
-    <ScreenLayout>
+    <ScreenLayout showLoader={isLoading}>
       <ThemeText align="center" variant="h4">
         {t(LocalizedStrings.SIGN_UP.TITLE)}
       </ThemeText>
@@ -80,6 +106,30 @@ const SignupScreen = () => {
             placeholder={t(LocalizedStrings.PLACEHOLDER.CONFIRM_PASSWORD)}
           />
 
+          {/* <>
+            <ThemeText fontWeight={500} style={styles.label}>
+              {t(LocalizedStrings.FORM.PHONE)}
+            </ThemeText>
+            <ThemeView row>
+              <CountryPickerComponent control={control} name="countryCode" />
+              <Input
+                control={control}
+                name="phoneNumber"
+                label={""}
+                placeholder={t(LocalizedStrings.PLACEHOLDER.PHONE)}
+                keyboardType="phone-pad"
+              />
+            </ThemeView>
+          </> */}
+
+          <Input
+            control={control}
+            name="phoneNumber"
+            label={t(LocalizedStrings.FORM.PHONE)}
+            placeholder={t(LocalizedStrings.PLACEHOLDER.PHONE)}
+            keyboardType="phone-pad"
+          />
+
           <Input
             control={control}
             name="username"
@@ -96,6 +146,7 @@ const SignupScreen = () => {
           <Button
             title={t(LocalizedStrings.SIGN_UP.TITLE)}
             onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
           />
         </ThemeView>
         <ThemeView row centered padded>
@@ -160,7 +211,7 @@ const SignupScreen = () => {
         <Button
           title={t(LocalizedStrings.LOGIN.TITLE)}
           fullWidth={false}
-          onPress={() => router.replace(ROUTES.LOGIN)}
+          onPress={() => router.replace(ROUTES.AUTH.LOGIN)}
           variant="link"
           size="small"
           fontSize={moderateScale(14)}
@@ -177,6 +228,9 @@ const createStyles = (theme: Theme) =>
     },
     btnContainer: {
       gap: verticalScale(15),
+    },
+    label: {
+      fontSize: moderateScale(14),
     },
     divider: {
       backgroundColor: theme.colors.border,
