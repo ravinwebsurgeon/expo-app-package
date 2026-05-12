@@ -46,3 +46,4 @@ temp_interactive_push.bat
 
 .env
 .gitignore
+branch_structure.json
